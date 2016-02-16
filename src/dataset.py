@@ -2,16 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import os
-import urllib2
+import urllib
 import socket
 import locale
 import zipfile
 import tarfile
 from sklearn.cross_validation import StratifiedShuffleSplit, KFold
 
-from ui import *
-from general import *
-from files import *
+from .ui import *
+from .general import *
+from .files import *
 
 
 class Dataset(object):
@@ -482,7 +482,7 @@ class Dataset(object):
                     fo.close()
                     os.rename(tmp_file, item['local_package'])
 
-            except (urllib2.URLError, socket.timeout), e:
+            except (urllib2.URLError, socket.timeout) as e:
                 try:
                     fo.close()
                 except:
@@ -933,7 +933,7 @@ class TUTAcousticScenes_2016_DevelopmentSet(Dataset):
                 for row in reader:
                     if row[0] not in meta_data:
                         meta_data[row[0]] = row[1]
-                                    
+
                 f.close()
                 # Read evaluation files in
                 eval_filename = os.path.join(self.evaluation_setup_path, 'fold' + str(fold) + '_evaluate.txt')
@@ -1453,7 +1453,7 @@ class CHiMEHome_DomesticAudioTag_DevelopmentSet(Dataset):
 
                     for i, tag in enumerate(meta_data['majorityvote']):
                         if tag is 'b':
-                            print file
+                            print(file)
 
                         if tag is not 'S' and tag is not 'U':
                             tags.append(self.tagcode_to_taglabel(tag))
@@ -1489,9 +1489,9 @@ class CHiMEHome_DomesticAudioTag_DevelopmentSet(Dataset):
                     refined_files.append(self.relative_to_absolute_path(os.path.join('chime_home','chunks',row[1]+'.wav')))
 
             fold = 1
-            files = numpy.array(refined_files) 
+            files = numpy.array(refined_files)
 
-            for train_index, test_index in kf:                
+            for train_index, test_index in kf:
 
                 train_files = files[train_index]
                 test_files = files[test_index]

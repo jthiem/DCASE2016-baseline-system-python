@@ -3,6 +3,8 @@
 #
 # DCASE 2016::Acoustic Scene Classification / Baseline System
 
+from __future__ import print_function
+
 from src.ui import *
 from src.general import *
 from src.files import *
@@ -65,10 +67,10 @@ def main(argv):
 
     dataset_evaluation_mode = 'folds'
     if args.development and not args.challenge:
-        print "Running system in development mode"
+        print("Running system in development mode")
         dataset_evaluation_mode = 'folds'
     elif not args.development and args.challenge:
-        print "Running system in challenge mode"
+        print("Running system in challenge mode")
         dataset_evaluation_mode = 'full'
 
     # Get dataset container class
@@ -122,7 +124,7 @@ def main(argv):
     if params['flow']['train_system']:
         section_header('System training')
 
-        do_system_training(dataset=dataset,                           
+        do_system_training(dataset=dataset,
                            model_path=params['path']['models'],
                            feature_normalizer_path=params['path']['feature_normalizers'],
                            feature_path=params['path']['features'],
@@ -142,16 +144,16 @@ def main(argv):
         if params['flow']['test_system']:
             section_header('System testing')
 
-            do_system_testing(dataset=dataset,                              
+            do_system_testing(dataset=dataset,
                               feature_path=params['path']['features'],
                               result_path=params['path']['results'],
                               model_path=params['path']['models'],
                               feature_params=params['features'],
                               dataset_evaluation_mode=dataset_evaluation_mode,
-                              classifier_method=params['classifier']['method'],                              
+                              classifier_method=params['classifier']['method'],
                               overwrite=params['general']['overwrite']
                               )
-            
+
             foot()
 
         # System evaluation
@@ -177,21 +179,21 @@ def main(argv):
         if params['flow']['test_system']:
             section_header('System testing with challenge data')
 
-            do_system_testing(dataset=challenge_dataset,                              
+            do_system_testing(dataset=challenge_dataset,
                               feature_path=params['path']['features'],
                               result_path=params['path']['challenge_results'],
                               model_path=params['path']['models'],
                               feature_params=params['features'],
                               dataset_evaluation_mode=dataset_evaluation_mode,
-                              classifier_method=params['classifier']['method'],                              
+                              classifier_method=params['classifier']['method'],
                               overwrite=True
                               )
 
             foot()
 
-            print " "
-            print "Your results for the challenge data are stored at ["+params['path']['challenge_results']+"]"
-            print " "
+            print(" ")
+            print("Your results for the challenge data are stored at ["+params['path']['challenge_results']+"]")
+            print(" ")
     return 0
 
 
@@ -460,7 +462,7 @@ def do_feature_normalization(dataset, feature_normalizer_path, feature_path, dat
 
                 # Accumulate statistics
                 normalizer.accumulate(feature_data)
-            
+
             # Calculate normalization factors
             normalizer.finalize()
 
@@ -660,10 +662,10 @@ def do_system_testing(dataset, result_path, feature_path, model_path, feature_pa
                          fold=fold,
                          percentage=(float(file_id) / file_count),
                          note=os.path.split(item['file'])[1])
-                
+
                 # Load features
                 feature_filename = get_feature_filename(audio_file=item['file'], path=feature_path)
-                
+
                 if os.path.isfile(feature_filename):
                     feature_data = load_data(feature_filename)['feat']
                 else:
@@ -740,7 +742,7 @@ def do_classification_gmm(feature_data, model_container):
         logls[label_id] = numpy.sum(model_container['models'][label].score(feature_data))
 
     classification_result_id = numpy.argmax(logls)
-    return model_container['models'].keys()[classification_result_id]
+    return list(model_container['models'].keys())[classification_result_id]
 
 
 def do_system_evaluation(dataset, result_path, dataset_evaluation_mode='folds'):
@@ -793,34 +795,34 @@ def do_system_evaluation(dataset, result_path, dataset_evaluation_mode='folds'):
         results_fold.append(dcase2016_scene_metric_fold.results())
     results = dcase2016_scene_metric.results()
 
-    print "  File-wise evaluation, over %d folds" % dataset.fold_count
+    print("  File-wise evaluation, over %d folds" % dataset.fold_count)
     fold_labels = ''
     separator = '     =====================+======+======+==========+  +'
     if dataset.fold_count > 1:
         for fold in dataset.folds(mode=dataset_evaluation_mode):
             fold_labels += " {:8s} |".format('Fold'+str(fold))
             separator += "==========+"
-    print "     {:20s} | {:4s} : {:4s} | {:8s} |  |".format('Scene label', 'Nref', 'Nsys', 'Accuracy')+fold_labels
-    print separator
+    print("     {:20s} | {:4s} : {:4s} | {:8s} |  |".format('Scene label', 'Nref', 'Nsys', 'Accuracy')+fold_labels)
+    print(separator)
     for label_id, label in enumerate(sorted(results['class_wise_accuracy'])):
         fold_values = ''
         if dataset.fold_count > 1:
             for fold in dataset.folds(mode=dataset_evaluation_mode):
                 fold_values += " {:5.1f} %  |".format(results_fold[fold-1]['class_wise_accuracy'][label] * 100)
-        print "     {:20s} | {:4d} : {:4d} | {:5.1f} %  |  |".format(label,
+        print("     {:20s} | {:4d} : {:4d} | {:5.1f} %  |  |".format(label,
                                                                      results['class_wise_data'][label]['Nref'],
                                                                      results['class_wise_data'][label]['Nsys'],
-                                                                     results['class_wise_accuracy'][label] * 100)+fold_values
-    print separator
+                                                                     results['class_wise_accuracy'][label] * 100)+fold_values)
+    print(separator)
     fold_values = ''
     if dataset.fold_count > 1:
         for fold in dataset.folds(mode=dataset_evaluation_mode):
             fold_values += " {:5.1f} %  |".format(results_fold[fold-1]['overall_accuracy'] * 100)
 
-    print "     {:20s} | {:4d} : {:4d} | {:5.1f} %  |  |".format('Overall accuracy',
+    print("     {:20s} | {:4d} : {:4d} | {:5.1f} %  |  |".format('Overall accuracy',
                                                                  results['Nref'],
                                                                  results['Nsys'],
-                                                                 results['overall_accuracy'] * 100)+fold_values
+                                                                 results['overall_accuracy'] * 100)+fold_values)
 
 if __name__ == "__main__":
     try:
