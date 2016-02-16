@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
 import os
 import hashlib
 import json
@@ -40,6 +41,8 @@ def get_parameter_hash(params):
     """
 
     md5 = hashlib.md5()
-    md5.update(str(json.dumps(params, sort_keys=True)))
+    if sys.version_info > (3,):
+        md5.update(bytes(str(json.dumps(params, sort_keys=True)),'utf-8'))
+    else:
+        md5.update(str(json.dumps(params, sort_keys=True)))
     return md5.hexdigest()
-

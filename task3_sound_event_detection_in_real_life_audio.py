@@ -33,7 +33,7 @@ def main(argv):
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description=textwrap.dedent('''\
             DCASE 2016
-            Task 3: Sound Event Detection in Real-life Audio 
+            Task 3: Sound Event Detection in Real-life Audio
             Baseline System
             ---------------------------------------------
                 Tampere University of Technology / Audio Research Group
@@ -68,10 +68,10 @@ def main(argv):
 
     dataset_evaluation_mode = 'folds'
     if args.development and not args.challenge:
-        print "Running system in development mode"
+        print("Running system in development mode")
         dataset_evaluation_mode = 'folds'
     elif not args.development and args.challenge:
-        print "Running system in challenge mode"
+        print("Running system in challenge mode")
         dataset_evaluation_mode = 'full'
 
     # Get dataset container class
@@ -145,7 +145,7 @@ def main(argv):
         if params['flow']['test_system']:
             section_header('System testing     [Development data]')
 
-            do_system_testing(dataset=dataset,                              
+            do_system_testing(dataset=dataset,
                               result_path=params['path']['results'],
                               feature_path=params['path']['features'],
                               model_path=params['path']['models'],
@@ -180,7 +180,7 @@ def main(argv):
         if params['flow']['test_system']:
             section_header('System testing     [Challenge data]')
 
-            do_system_testing(dataset=challenge_dataset,                              
+            do_system_testing(dataset=challenge_dataset,
                               result_path=params['path']['challenge_results'],
                               feature_path=params['path']['features'],
                               model_path=params['path']['models'],
@@ -192,9 +192,9 @@ def main(argv):
                               )
             foot()
 
-            print " "
-            print "Your results for the challenge data are stored at ["+params['path']['challenge_results']+"]"
-            print " "
+            print(" ")
+            print("Your results for the challenge data are stored at ["+params['path']['challenge_results']+"]")
+            print(" ")
 
 
 def process_parameters(params):
@@ -445,10 +445,10 @@ def do_feature_normalization(dataset, feature_normalizer_path, feature_path, dat
     for fold in dataset.folds(mode=dataset_evaluation_mode):
         for scene_id, scene_label in enumerate(dataset.scene_labels):
             current_normalizer_file = get_feature_normalizer_filename(fold=fold, scene_label=scene_label, path=feature_normalizer_path)
-            
+
             if not os.path.isfile(current_normalizer_file) or overwrite:
                 # Collect sequence files from scene class
-                files = []                
+                files = []
                 for item_id, item in enumerate(dataset.train(fold, scene_label=scene_label)):
                     if item['file'] not in files:
                         files.append(item['file'])
@@ -834,13 +834,13 @@ def do_system_evaluation(dataset, result_path, dataset_evaluation_mode='folds'):
         overall_metrics_per_scene[scene_label]['segment_based_metrics'] = dcase2016_segment_based_metric.results()
         overall_metrics_per_scene[scene_label]['event_based_metrics'] = dcase2016_event_based_metric.results()
 
-    print "  Evaluation over %d folds" % dataset.fold_count
-    print " "
-    print "  Results per scene "
-    print "  {:18s} | {:5s} |  | {:39s}  ".format('', 'Main', 'Secondary metrics')
-    print "  {:18s} | {:5s} |  | {:38s} | {:14s} | {:14s} |  {:14s} ".format('', '', 'Seg/Overall','Seg/Class', 'Event/Overall','Event/Class')
-    print "  {:18s} | {:5s} |  | {:6s} : {:5s} : {:5s} : {:5s} : {:5s} | {:6s} : {:5s} | {:6s} : {:5s} | {:6s} : {:5s} |".format('Scene', 'ER', 'F1', 'ER', 'ER/S', 'ER/D', 'ER/I', 'F1', 'ER', 'F1', 'ER', 'F1', 'ER')
-    print "  -------------------+-------+  +--------+-------+-------+-------+-------+--------+-------+--------+-------+--------+-------+"
+    print("  Evaluation over %d folds" % dataset.fold_count)
+    print(" ")
+    print("  Results per scene ")
+    print("  {:18s} | {:5s} |  | {:39s}  ".format('', 'Main', 'Secondary metrics'))
+    print("  {:18s} | {:5s} |  | {:38s} | {:14s} | {:14s} |  {:14s} ".format('', '', 'Seg/Overall','Seg/Class', 'Event/Overall','Event/Class'))
+    print("  {:18s} | {:5s} |  | {:6s} : {:5s} : {:5s} : {:5s} : {:5s} | {:6s} : {:5s} | {:6s} : {:5s} | {:6s} : {:5s} |".format('Scene', 'ER', 'F1', 'ER', 'ER/S', 'ER/D', 'ER/I', 'F1', 'ER', 'F1', 'ER', 'F1', 'ER'))
+    print("  -------------------+-------+  +--------+-------+-------+-------+-------+--------+-------+--------+-------+--------+-------+")
     averages = {
         'segment_based_metrics': {
             'overall': {
@@ -864,7 +864,7 @@ def do_system_evaluation(dataset, result_path, dataset_evaluation_mode='folds'):
         },
     }
     for scene_id, scene_label in enumerate(dataset.scene_labels):
-        print "  {:18s} | {:5.2f} |  | {:4.1f} % : {:5.2f} : {:5.2f} : {:5.2f} : {:5.2f} | {:4.1f} % : {:5.2f} | {:4.1f} % : {:5.2f} | {:4.1f} % : {:5.2f} |".format(scene_label,
+        print("  {:18s} | {:5.2f} |  | {:4.1f} % : {:5.2f} : {:5.2f} : {:5.2f} : {:5.2f} | {:4.1f} % : {:5.2f} | {:4.1f} % : {:5.2f} | {:4.1f} % : {:5.2f} |".format(scene_label,
                                         overall_metrics_per_scene[scene_label]['segment_based_metrics']['overall']['ER'],
                                         overall_metrics_per_scene[scene_label]['segment_based_metrics']['overall']['F'] * 100,
                                         overall_metrics_per_scene[scene_label]['segment_based_metrics']['overall']['ER'],
@@ -877,7 +877,7 @@ def do_system_evaluation(dataset, result_path, dataset_evaluation_mode='folds'):
                                         overall_metrics_per_scene[scene_label]['event_based_metrics']['overall']['ER'],
                                         overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise_average']['F']*100,
                                         overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise_average']['ER'],
-                                                                     )
+                                                                     ))
         averages['segment_based_metrics']['overall']['ER'].append(overall_metrics_per_scene[scene_label]['segment_based_metrics']['overall']['ER'])
         averages['segment_based_metrics']['overall']['F'].append(overall_metrics_per_scene[scene_label]['segment_based_metrics']['overall']['F'])
         averages['segment_based_metrics']['class_wise_average']['ER'].append(overall_metrics_per_scene[scene_label]['segment_based_metrics']['class_wise_average']['ER'])
@@ -887,8 +887,8 @@ def do_system_evaluation(dataset, result_path, dataset_evaluation_mode='folds'):
         averages['event_based_metrics']['class_wise_average']['ER'].append(overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise_average']['ER'])
         averages['event_based_metrics']['class_wise_average']['F'].append(overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise_average']['F'])
 
-    print "  -------------------+-------+  +--------+-------+-------+-------+-------+--------+-------+--------+-------+--------+-------+"
-    print "  {:18s} | {:5.2f} |  | {:4.1f} % : {:5.2f} : {:21s} | {:4.1f} % : {:5.2f} | {:4.1f} % : {:5.2f} | {:4.1f} % : {:5.2f} |".format('Average',
+    print("  -------------------+-------+  +--------+-------+-------+-------+-------+--------+-------+--------+-------+--------+-------+")
+    print("  {:18s} | {:5.2f} |  | {:4.1f} % : {:5.2f} : {:21s} | {:4.1f} % : {:5.2f} | {:4.1f} % : {:5.2f} | {:4.1f} % : {:5.2f} |".format('Average',
                                         numpy.mean(averages['segment_based_metrics']['overall']['ER']),
                                         numpy.mean(averages['segment_based_metrics']['overall']['F'])*100,
                                         numpy.mean(averages['segment_based_metrics']['overall']['ER']),
@@ -899,26 +899,26 @@ def do_system_evaluation(dataset, result_path, dataset_evaluation_mode='folds'):
                                         numpy.mean(averages['event_based_metrics']['overall']['ER']),
                                         numpy.mean(averages['event_based_metrics']['class_wise_average']['F'])*100,
                                         numpy.mean(averages['event_based_metrics']['class_wise_average']['ER']),
-                                                    )
+                                                    ))
 
-    print "  "
+    print("  ")
     # Restore warnings to default settings
     warnings.simplefilter("default")
-    print "  Results per events "
+    print("  Results per events ")
 
     for scene_id, scene_label in enumerate(dataset.scene_labels):
-        print "  "
-        print "  "+scene_label.upper()
-        print "  {:20s} | {:30s} |  | {:15s} ".format('', 'Segment-based', 'Event-based')
-        print "  {:20s} | {:5s} : {:5s} : {:6s} : {:5s} |  | {:5s} : {:5s} : {:6s} : {:5s} |".format('Event', 'Nref', 'Nsys', 'F1', 'ER', 'Nref', 'Nsys', 'F1', 'ER')
-        print "  ---------------------+-------+-------+--------+-------+  +-------+-------+--------+-------+"
+        print("  ")
+        print("  "+scene_label.upper())
+        print("  {:20s} | {:30s} |  | {:15s} ".format('', 'Segment-based', 'Event-based'))
+        print("  {:20s} | {:5s} : {:5s} : {:6s} : {:5s} |  | {:5s} : {:5s} : {:6s} : {:5s} |".format('Event', 'Nref', 'Nsys', 'F1', 'ER', 'Nref', 'Nsys', 'F1', 'ER'))
+        print("  ---------------------+-------+-------+--------+-------+  +-------+-------+--------+-------+")
         seg_Nref = 0
         seg_Nsys = 0
 
         event_Nref = 0
         event_Nsys = 0
         for event_label in sorted(overall_metrics_per_scene[scene_label]['segment_based_metrics']['class_wise']):
-            print "  {:20s} | {:5d} : {:5d} : {:4.1f} % : {:5.2f} |  | {:5d} : {:5d} : {:4.1f} % : {:5.2f} |".format(event_label,
+            print("  {:20s} | {:5d} : {:5d} : {:4.1f} % : {:5.2f} |  | {:5d} : {:5d} : {:4.1f} % : {:5.2f} |".format(event_label,
                                                                         int(overall_metrics_per_scene[scene_label]['segment_based_metrics']['class_wise'][event_label]['Nref']),
                                                                         int(overall_metrics_per_scene[scene_label]['segment_based_metrics']['class_wise'][event_label]['Nsys']),
                                                                         overall_metrics_per_scene[scene_label]['segment_based_metrics']['class_wise'][event_label]['F']*100,
@@ -926,28 +926,28 @@ def do_system_evaluation(dataset, result_path, dataset_evaluation_mode='folds'):
                                                                         int(overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise'][event_label]['Nref']),
                                                                         int(overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise'][event_label]['Nsys']),
                                                                         overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise'][event_label]['F']*100,
-                                                                        overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise'][event_label]['ER'])
+                                                                        overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise'][event_label]['ER']))
             seg_Nref += int(overall_metrics_per_scene[scene_label]['segment_based_metrics']['class_wise'][event_label]['Nref'])
             seg_Nsys += int(overall_metrics_per_scene[scene_label]['segment_based_metrics']['class_wise'][event_label]['Nsys'])
 
             event_Nref += int(overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise'][event_label]['Nref'])
             event_Nsys += int(overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise'][event_label]['Nsys'])
-        print "  ---------------------+-------+-------+--------+-------+  +-------+-------+--------+-------+"
-        print "  {:20s} | {:5d} : {:5d} : {:14s} |  | {:5d} : {:5d} : {:14s} |".format('Sum',
+        print("  ---------------------+-------+-------+--------+-------+  +-------+-------+--------+-------+")
+        print("  {:20s} | {:5d} : {:5d} : {:14s} |  | {:5d} : {:5d} : {:14s} |".format('Sum',
                                                                         seg_Nref,
                                                                         seg_Nsys,
                                                                         '',
                                                                         event_Nref,
                                                                         event_Nsys,
-                                                                        '')
-        print "  {:20s} | {:5s}   {:5s} : {:4.1f} % : {:5.2f} |  | {:5s}   {:5s} : {:4.1f} % : {:5.2f} |".format('Average',
+                                                                        ''))
+        print("  {:20s} | {:5s}   {:5s} : {:4.1f} % : {:5.2f} |  | {:5s}   {:5s} : {:4.1f} % : {:5.2f} |".format('Average',
                                                                         '', '',
                                                                         overall_metrics_per_scene[scene_label]['segment_based_metrics']['class_wise_average']['F']*100,
                                                                         overall_metrics_per_scene[scene_label]['segment_based_metrics']['class_wise_average']['ER'],
                                                                         '', '',
                                                                         overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise_average']['F']*100,
-                                                                        overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise_average']['ER'])
-        print "  "
+                                                                        overall_metrics_per_scene[scene_label]['event_based_metrics']['class_wise_average']['ER']))
+        print("  ")
 
 if __name__ == "__main__":
     try:
