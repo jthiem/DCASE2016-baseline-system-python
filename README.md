@@ -72,6 +72,7 @@ PyYAML is required for handling the configuration files.
 `pip install librosa`
 
 Librosa is required for the feature extraction.
+Use cournape/samplerate (from github) instead of scikit.samplerate to get high quality resampling.
 
 3. Usage
 ========
