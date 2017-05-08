@@ -93,7 +93,7 @@ def feature_extraction(y, fs=44100, statistics=True, include_mfcc0=True, include
                                     htk=mfcc_params['htk'])
     mel_spectrum = numpy.dot(mel_basis, magnitude_spectrogram)
     mfcc = librosa.feature.mfcc(S=librosa.logamplitude(mel_spectrum))
-    
+
     # stereo features: first, do stft
     spec_left = librosa.stft(y[0] + eps, n_fft=mfcc_params['n_fft'],
                              win_length=mfcc_params['win_length'],
@@ -104,13 +104,13 @@ def feature_extraction(y, fs=44100, statistics=True, include_mfcc0=True, include
                               hop_length=mfcc_params['hop_length'],
                               center=True, window=window)
     # now get mel-band crosscorrelation
-    cross = numpy.dot(mel_basis, numpy.abs(spec_left * numpy.conjugate(spec_right)))
-    crossnorm = numpy.sqrt(numpy.dot(mel_basis, numpy.abs(spec_left))**2 
-                           * numpy.dot(mel_basis, numpy.abs(spec_right))**2)
+    cross = numpy.abs(numpy.dot(mel_basis, spec_left * numpy.conjugate(spec_right)))
+    crossnorm = numpy.sqrt(numpy.dot(mel_basis, numpy.abs(spec_left)**2)
+                           * numpy.dot(mel_basis, numpy.abs(spec_right)**2))
     iacc = cross/crossnorm
 
-    mfcc = numpy.vstack((mfcc, iacc[1:21, :]))
-    
+    mfcc = numpy.vstack((mfcc, iacc[1:20, :]))
+
     # Collect the feature matrix
     feature_matrix = mfcc
     if include_delta:

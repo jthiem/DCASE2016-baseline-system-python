@@ -387,7 +387,7 @@ def do_feature_extraction(files, dataset, feature_path, params, overwrite=False)
         if not os.path.isfile(current_feature_file) or overwrite:
             # Load audio
             if os.path.isfile(dataset.relative_to_absolute_path(audio_filename)):
-                y, fs = load_audio(filename=dataset.relative_to_absolute_path(audio_filename), mono=True, fs=params['fs'])
+                y, fs = load_audio(filename=dataset.relative_to_absolute_path(audio_filename), mono=False, fs=params['fs'])
             else:
                 raise IOError("Audio file not found [%s]" % audio_filename)
 
@@ -728,7 +728,7 @@ def do_system_testing(dataset, result_path, feature_path, model_path, feature_pa
                     else:
                         # Load audio
                         if os.path.isfile(dataset.relative_to_absolute_path(item['file'])):
-                            y, fs = load_audio(filename=item['file'], mono=True, fs=feature_params['fs'])
+                            y, fs = load_audio(filename=item['file'], mono=False, fs=feature_params['fs'])
                         else:
                             raise IOError("Audio file not found [%s]" % item['file'])
 
